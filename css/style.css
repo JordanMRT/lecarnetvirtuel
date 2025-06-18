@@ -25,7 +25,7 @@
 
 .scrap-photo, .scrap-tape {
   position: absolute;
-  max-width: 150px;
+  max-width: 350px;
   transform: rotate(-2deg);
   opacity: 0.95;
 }
@@ -38,6 +38,12 @@
 .scrap-tape {
   width: 60px;
   transform: rotate(5deg);
+  opacity: 1;
+}
+
+.scrap-tape2 {
+  width: 60px;
+  transform: rotate(9deg);
   opacity: 1;
 }
 
