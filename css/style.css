@@ -33,17 +33,12 @@
 .scrap-photo {
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  max-width: 350px;
 }
 
 .scrap-tape {
   width: 60px;
   transform: rotate(5deg);
-  opacity: 1;
-}
-
-.scrap-tape2 {
-  width: 60px;
-  transform: rotate(9deg);
   opacity: 1;
 }
 
