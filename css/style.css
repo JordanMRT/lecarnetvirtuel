@@ -47,3 +47,12 @@
     display: none;
   }
 }
+
+.patch {
+  max-width: 350px;
+  margin: 0 auto; /* centre horizontalement en tant que bloc */
+  transform: rotate(-5deg);
+  text-align: center;
+  padding-bottom: 2rem; /* espace avec le bas de la page si nécessaire */
+  padding-top: 2rem;
+}
