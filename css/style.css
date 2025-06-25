@@ -56,3 +56,26 @@
   padding-bottom: 2rem; /* espace avec le bas de la page si nécessaire */
   padding-top: 2rem;
 }
+
+.notebook-icon {
+  width: 45px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .notebook-icon {
+    width: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notebook-icon {
+    width: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .scrapbook-title {
+    font-size: 1.875rem; /* soit ~30px */
+  }
+}
