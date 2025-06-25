@@ -76,6 +76,6 @@
 
 @media (max-width: 640px) {
   .scrapbook-title {
-    font-size: 1.875rem; /* soit ~30px */
+    font-size: 1.875rem;
   }
 }
