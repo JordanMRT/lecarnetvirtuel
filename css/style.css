@@ -80,6 +80,6 @@
 
 @media (max-width: 640px) {
   .scrapbook-title {
-    font-size: 2rem;
+    font-size: 2rem !important; /* !important pour forcer la priorité */
   }
 }
