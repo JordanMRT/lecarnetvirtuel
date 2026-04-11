@@ -337,44 +337,6 @@
 
   [data-theme="dark"] .face-back, .back-date, .back-note, .back-tag { color: #1c1916; }
 
-
-    /* ── Bouton ajout ── */
-    .add-wrap .card-inner { transform: rotate(0deg) !important; }
-    .add-wrap:hover .card-inner { transform: rotate(0deg) rotateY(0deg) !important; }
-
-    .add-btn {
-      width: 100%;
-      aspect-ratio: 1/1.35;
-      border: 1px dashed var(--border);
-      border-radius: var(--r);
-      background: none;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: border-color 0.2s, color 0.2s;
-      box-shadow: none;
-    }
-    .add-btn:hover {
-      border-color: rgba(0,0,0,0.25);
-      color: var(--text);
-      box-shadow: none;
-    }
-    [data-theme="dark"] .add-btn:hover { border-color: rgba(255,255,255,0.2); }
-
-    .plus-icon {
-      font-size: 20px;
-      font-weight: 200;
-      line-height: 1;
-    }
-
     /* ── Message vide ── */
    .empty-msg {
   display: block;
@@ -606,12 +568,12 @@ function render() {
     const msg = document.createElement('p');
     msg.className   = 'empty-msg';
     msg.textContent = 'Aucun souvenir pour cette période.';
-    gridEl.insertBefore(msg, addWrap);
+    gridEl.insertBefore(msg);
     cards.push(msg);
   } else {
     visible.forEach(t => {
       const card = buildCard(t);
-      gridEl.insertBefore(card, addWrap);
+      gridEl.insertBefore(card);
       cards.push(card);
     });
   }
@@ -631,20 +593,6 @@ function render() {
     }
     window.addEventListener('resize', syncBackHeights);
 
-
-    /* ── Bouton « ajouter » ── */
-    const addWrap = document.createElement('div');
-    addWrap.className = 'card-wrap add-wrap';
-    addWrap.innerHTML = `
-      <button class="add-btn face" aria-label="Ajouter un souvenir">
-        <span class="plus-icon">+</span>
-        <span>ajouter</span>
-      </button>`;
-    gridEl.appendChild(addWrap);
-
-    render();
-
-
     /* ── Toggle dark / light ── */
     const themeBtn = document.getElementById('theme-btn');
     themeBtn.addEventListener('click', () => {
@@ -655,10 +603,7 @@ function render() {
   </script>
   
 <footer>
-  <div>
-    <div class="patch">
   <img src="images/amesamissigned-embroidered-patch.png" alt="A Mes Amis Patch" class="patch-img">
-  </div>
 </footer>
 
 </body>
