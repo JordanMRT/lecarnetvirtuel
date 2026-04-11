@@ -1,106 +1,665 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Le Carnet Virtuel</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;700&family=Permanent+Marker&family=Gloria+Hallelujah&family=Roseritta&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Souvenirs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
   <style>
+    /* ─────────────────────────────────────────
+       VARIABLES & RESET
+    ───────────────────────────────────────── */
+    :root {
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --radius: 20px;
+      --bg:           #f2efe9;
+      --text:         #1c1916;
+      --text-muted:   #8a8278;
+      --border:       rgba(0,0,0,0.07);
+      --glass-bg:     rgba(245,242,236,0.6);
+      --glass-border: rgba(255,255,255,0.55);
+      --tag-bg:       rgba(0,0,0,0.07);
+      --tag-color:    #5a5248;
+      --toggle-track: #e0dbd2;
+      --toggle-thumb: #8a7a68;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.05), 0 4px 18px rgba(0,0,0,0.06);
+      --shadow-lg:    0 8px 40px rgba(0,0,0,0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg:           #201c13;
+      --text:         #ece8e0;
+      --text-muted:   #7a7570;
+      --border:       rgba(255,255,255,0.06);
+      --glass-bg:     rgba(15,14,11,0.65);
+      --glass-border: rgba(255,255,255,0.11);
+      --tag-bg:       rgba(255,255,255,0.08);
+      --tag-color:    #b0a898;
+      --toggle-track: #28251e;
+      --toggle-thumb: #c4ad8a;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.3), 0 4px 24px rgba(0,0,0,0.28);
+      --shadow-lg:    0 8px 50px rgba(0,0,0,0.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
 
     body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background-color: #fbeee0;
-      background-image:
-      url("https://www.transparenttextures.com/patterns/natural-paper.png"),
-      url("https://www.transparenttextures.com/patterns/natural-paper.png");
-      background-blend-mode: multiply, lighten, soft-light;
-      font-family: 'Inter', 'sans-serif';
-      color: #a6785a;
+      transition: background 0.4s var(--ease), color 0.4s var(--ease);
     }
-    .font-playfair { font-family: 'Playfair Display', serif !important; }
-    .font-doodle { font-family: 'Gloria Hallelujah', 'Permanent Marker', cursive !important; }
-    .font-roseritta { font-family: 'Roseritta', cursive !important; }
-    .text-doodlebrown { color: #ad8667 !important; }
-    .scrapbook-shadow { box-shadow: 0 6px 20px 0 hsla(27,45%,70%,.11), 0 2px 6px 0 hsla(27,35%,65%,.08); border-radius: 14px !important; }
-    .scrapbook-card {
-      background: #fdf6e4;
-      border: 4.8px dashed #e1c9ae;
-      border-radius: 27px 21px 32px 25px/28px 22px 35px 22px;
-      box-shadow: 0 8px 28px 0 hsla(30, 60%, 60%, 0.14), 0 2px 4px 0 hsla(27, 40%, 45%, 0.09);
-      position: relative;
-      overflow: visible;
+
+ .texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url('bg-dot.png');
+  background-repeat: repeat;
+  background-size: 25px 25px;
+  opacity: 0.1;
+  transition: filter 0.45s var(--ease);
+}
+
+[data-theme="dark"] .texture {
+  filter: invert(1);
+  opacity: 0.15;
+}
+    /* ─────────────────────────────────────────
+       HEADER
+    ───────────────────────────────────────── */
+    header {
+    margin: 0 auto;
+    padding: 2.8rem 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     }
-    .scrapbook-title {
-      font-family: 'Roseritta', cursive;
-      font-weight: bold;
-      font-size: 2.25rem;
-      color: #a6785a;
+
+    .site-title {
+      font-family: "Covered By Your Grace", cursive;
+      font-weight: 300;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .site-title span {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* toggle dark/light */
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: inherit;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .theme-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.2); }
+    [data-theme="dark"] .theme-btn:hover { border-color: rgba(255,255,255,0.2); }
+
+    /* ─────────────────────────────────────────
+       FILTRES
+    ───────────────────────────────────────── */
+    .filters-wrap {
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.28rem 0.85rem;
+      font-family: inherit;
+      font-size: 10px;
       letter-spacing: 0.07em;
-      text-shadow: 0 3px 6px #fdede5, 0 1px 0 #e3c4a4;
-      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+    .filter-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.2); }
+    .filter-btn.active { color: var(--text); border-color: var(--text); }
+    [data-theme="dark"] .filter-btn:hover,
+    [data-theme="dark"] .filter-btn.active { border-color: rgba(255,255,255,0.35); }
+
+    /* ─────────────────────────────────────────
+       GRILLE
+    ───────────────────────────────────────── */
+.grid {
+  column-width: 260px;
+  column-gap: 3.2rem;
+  margin: 2.6rem auto 5rem;
+  padding: 0 2.5rem;
+  max-width: auto;
+}
+    /* ─────────────────────────────────────────
+       CARTE (FLIP)
+    ───────────────────────────────────────── */
+.card-wrap {
+  position: relative;
+  border-radius: 20px;
+  break-inside: avoid;
+  margin-bottom: 3rem;
+  perspective: 900px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  transition: transform 0.25s var(--ease);
+}
+
+/* .card-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.card-wrap:hover {
+  z-index: 10;
+} */
+
+   /*  .card-inner {
       position: relative;
-      z-index: 4;
+      width: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.55s var(--ease);
+    } */
+
+   .card-inner {
+  position: relative;
+  width: 100%;
+  position: relative;
+  overflow: hidden;          /* ← déplacé ici */
+  border-radius: var(--r);   /* ← idem, pour que le clip suive l'arrondi */
+}
+
+    /* légères inclinaisons au repos
+    .card-wrap:nth-child(4n+1) .card-inner { transform: rotate(-1.8deg); }
+    .card-wrap:nth-child(4n+2) .card-inner { transform: rotate(1.2deg);  }
+    .card-wrap:nth-child(4n+3) .card-inner { transform: rotate(-0.6deg); }
+    .card-wrap:nth-child(4n+4) .card-inner { transform: rotate(1.5deg);  }*/
+
+   /* .card-wrap:hover .card-inner,
+    .card-wrap.flipped .card-inner {
+      transform: rotate(0deg) rotateY(180deg) !important;
+    } */
+
+    .face {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--r);
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.3s var(--ease), border-color 0.4s var(--ease), background 0.4s var(--ease);
     }
-    .washi-tape, .washi-tape-2 {
-      position: absolute; z-index:2; display:flex;align-items:center;justify-content:center; font-family:'Comic Sans MS',cursive;
-      font-size:1rem; pointer-events:none;letter-spacing:1.5px; line-height: 1.1;
+    .card-wrap:hover .face { box-shadow: var(--shadow-h); }
+
+    /* ── Recto ── */
+    .face-front {
+      display: flex;
+      flex-direction: column;
     }
-    .washi-tape { top:-18px; left:18px; width:90px; height:26px;
-      background: linear-gradient(100deg,#ffe0de 60%,#ecdcb3 100%); opacity:0.88; border-radius:12px 18px 22px 8px; border:1.7px dashed #d69985; transform:rotate(-7deg);
-      color:#b68b6a; }
-    .washi-tape-2 { top:-14px; right:16px; width:80px; height:24px;
-      background:linear-gradient(80deg,#fdf6e4 50%,#f7dad4 100%); border-radius:10px 18px 14px 9px; border:1.2px solid #e1a7a2; transform:rotate(10deg);
-      color:#ad7864; }
-    .soft-link {
-      text-decoration: none;
-      border-bottom: 2.5px wavy #f6d3c7;
-      transition: border-color 0.2s;
-      background: linear-gradient(90deg, #fbecdb 65%, #ffe6ea 100%);
+
+   .ticket-img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--r) var(--r) 0 0;
+  display: block;
+  max-height: 520px;
+  object-fit: contain;
+}
+
+    .ticket-img-placeholder {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+
+    .ticket-stub {
+      padding: 0.65rem 0.8rem 0.8rem;
+      border-top: 1px dashed var(--border);
     }
-    .soft-link:hover {
-      border-bottom: 2.5px wavy #e7bcb4;
-      background: linear-gradient(90deg, #ffe2c9 65%, #fae6f5 100%);
+
+    .ticket-title {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.35;
     }
+
+    .ticket-meta {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Verso ── */
+    .face-back {
+  position: absolute;
+  /* Remplace inset: 0 par ceci : */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* pas de bottom — la hauteur s'adapte au contenu */
+  min-height: 100%;   /* couvre toujours le recto */
+  overflow: hidden;   /* coupe proprement si ça déborde quand même */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.9rem;
+  background-color: #ece8e0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease);
+  border-radius: 20px;
+  z-index: 2;
+}
+
+.card-wrap:hover .face-back {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.face-back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  pointer-events: none;
+  border: 1px dashed #8a7a68;
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease);
+}
+
+.card-wrap:hover .face-back::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.face-front {
+  transition: opacity 0.25s var(--ease);
+}
+
+.card-wrap:hover .face-front {
+  opacity: 0.08;
+}
+
+    .back-date {
+      font-size: 12px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .back-note {
+      font-family: "Covered By Your Grace", cursive;
+      font-weight: 10;
+      font-size: 19px;
+      line-height: 1.6;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .back-tag {
+      margin-top: 0.75rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid var(--border);
+      font-size: 9px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+  [data-theme="dark"] .face-back, .back-date, .back-note, .back-tag { color: #1c1916; }
+
+
+    /* ── Bouton ajout ── */
+    .add-wrap .card-inner { transform: rotate(0deg) !important; }
+    .add-wrap:hover .card-inner { transform: rotate(0deg) rotateY(0deg) !important; }
+
+    .add-btn {
+      width: 100%;
+      aspect-ratio: 1/1.35;
+      border: 1px dashed var(--border);
+      border-radius: var(--r);
+      background: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+      box-shadow: none;
+    }
+    .add-btn:hover {
+      border-color: rgba(0,0,0,0.25);
+      color: var(--text);
+      box-shadow: none;
+    }
+    [data-theme="dark"] .add-btn:hover { border-color: rgba(255,255,255,0.2); }
+
+    .plus-icon {
+      font-size: 20px;
+      font-weight: 200;
+      line-height: 1;
+    }
+
+    /* ── Message vide ── */
+   .empty-msg {
+  display: block;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin: 2rem auto;
+
+  text-align: center;
+}
+
+.patch-img {
+  max-width: 350px;
+  margin: 0 auto; /* centre horizontalement en tant que bloc */
+  text-align: center;
+  padding-bottom: 2rem; /* espace avec le bas de la page si nécessaire */
+  padding-top: 2rem;
+  display: block;
+}
   </style>
-  <link rel="shortcut icon" type="image/png" href="images/favicon1.ico"/>
+    <link rel="shortcut icon" type="image/png" href="images/favico.ico"/>
 </head>
 <body>
-  <div class="min-h-screen bg-background px-4 sm:px-6 md:px-0 flex flex-col items-center justify-center">
-    <div class="relative py-10 px-7 scrapbook-card scrapbook-shadow max-w-lg mx-auto">
-      <!-- Washi tape effect -->
-      <span class="washi-tape">hello!</span>
-      <span class="washi-tape-2">bébous</span>
-      <h1 class="scrapbook-title flex items-center justify-center gap-2 text-left">
-        <span>Bienvenue dans ce carnet virtuel</span>
-  <img class="notebook-icon inline-block align-middle w-6 sm:w-7 md:w-[45px] transition-all duration-300 hidden sm:inline-block w-7 md:w-[45px] notebook-icon" width="45" height="45" src="images/favicon1.ico" alt="notebook">
-</h1>
-        <!-- PNG: Notebook Icon  
-        <img class="ml-2" width="45" height="45" src="images/favicon1.ico" alt="notebook">
-      </h1>-->
-      <p class="text-lg text-gray-500 font-serif mb-6 mt-2 leading-relaxed">
-        Je ne sais pas s'il sera plus simple de s'y retrouver comme ça, mais ici, je vais essayé de vous mettre les vidéos des lettres et pourquoi pas, de temps en temps, des petites photos. <em>(Comme ça, si un jour j'oublie de vous écrire le lien, vous pourrez venir par ici)</em>
-      </p>
-      <a
-        href="player.html"
-        class="inline-block px-6 py-3 font-serif font-semibold rounded-lg soft-link transition shadow scrapbook-shadow"
-        >Ouvrir le carnet</a
-      >
+<div class="texture"></div>
+  <header>
+    <h1 class="site-title">Souvenirs <span>&</span> tickets</h1>
+    <button class="theme-btn" id="theme-btn" aria-label="Changer de thème">☽</button>
+  </header>
+
+  <div class="filters-wrap">
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-year="all">Tout</button>
     </div>
   </div>
-  <!-- Sraps in the back -->
-<div class="collage">
-  <img src="images/postcard-june-text.jpg" alt="photo1" class="scrap-photo" style="top: 10vh; left: 5vw;">
-  <img src="images/postcard-june.jpg" alt="photo2" class="scrap-photo" style="top: 35vh; right: 68vw;">
-  <img src="images/transp-tape01.png" alt="tape1" class="scrap-tape" style="top: 9vh; left: 8vw;">
-  <img src="images/transp-tape02.png" alt="tape2" class="scrap-tape" style="top: 63vh; right: 87vw;">
-</div>
+
+  <div class="grid" id="grid"></div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       TICKETS — ajoute les tiens ici.
+
+       Champs disponibles :
+         title  — nom sur le recto (ex : "Café Procope")
+         meta   — sous-titre     (ex : "Paris")
+         date   — date complète pour le verso (ex : "12 janvier 2024")
+         year   — année pour le filtre        (ex : "2024")
+         note   — texte au verso, italique    (ex : "Il neigeait dehors.")
+         tag    — catégorie basse du verso    (ex : "café")
+         color  — couleur du placeholder si pas d'image (ex : "#d6d0c6")
+         img    — (optionnel) chemin ou URL vers une image scannée
+
+       Exemple avec image :
+         { title: "Ticket cinéma", meta: "MK2 Bibliothèque", date: "3 octobre 2024",
+           year: "2024", note: "...", tag: "cinéma", img: "images/ticket-mk2.jpg" }
+
+    ═══════════════════════════════════════════════════════════ */
+    const TICKETS = [
+      {
+        title: "Journée à Collioure",
+        meta: "Collioure - Billets de train",
+        date: "24 août 2025",
+        year: "2025",
+        note: "Comme le veut la tradition, je suis parti une journée à Collioure en été.",
+        tag: "train",
+        img: "train-collioure-240825.png",
+      },
+      {
+        title: "Restaurant Fratelli près de Biarritz",
+        meta: "Tarnos - Ticket de caisse",
+        date: "26 août 2025",
+        year: "2025",
+        note: "Partir sur un coup de tête dans le Sud Ouest après les retrouvailles avec Jorick, très peu de sommeil mais de beaux souvenirs.",
+        tag: "restaurant",
+        color: "#c9c4b8",
+        img: "resto-tarnos-260825.png",
+      },
+      {
+        title: "Escapade à Monaco",
+        meta: "Monaco - Ticket de parking",
+        date: "01 mai 2025",
+        year: "2025",
+        note: "Autour de Nice, petite halte pour découvrir Monaco le temps d'un goûter.",
+        tag: "parking",
+        color: "#c0bbb0",
+        img: "monaco-010525.png",
+      },
+      {
+        title: "La Cité de l'Espace à Toulouse",
+        meta: "Toulouse - Brochure et billet d'entrée",
+        date: "27 août 2025",
+        year: "2025",
+        note: "Retour de Biarritz, arrêt à la Cité de l'Espace. J'ai testé un simulateur de décollage de fusée, c'était génial.",
+        tag: "activité",
+        color: "#cdc8bc",
+        img: "citedelespace-270825.png",
+      },
+      {
+        title: "Restaurant Yitoko à Angoulême",
+        meta: "Angoulême - Carte de visite",
+        date: "20 juillet 2025",
+        year: "2025",
+        note: "On a été chercher des sushis pour l'anniversaire de Léa (elle adore ça). Commande à emporter avec les copains.",
+        tag: "restaurant",
+        color: "#c8c3b8",
+        img: "resto-angouleme-200725.png",
+      },
+      {
+        title: "Amélie Poulain au cinéma",
+        meta: "Nîmes - Ticket de cinéma",
+        date: "19 septembre 2025",
+        year: "2025",
+        note: "Projection du Fabuleux Destin d'Amélie Poulain au cinéma accompagné d'un musicien live. Première fois que je vois mon film préféré au cinéma, un moment si doux.",
+        tag: "cinéma",
+        color: "#d2cec5",
+        img: "ameliepoulain-190925.png",
+      },
+      {
+        title: "Reçu RATP",
+        meta: "Paris - Reçu",
+        date: "13 décembre 2025",
+        year: "2025",
+        note: "Quelques jours à Paris pour voir les deux premiers épisodes du docu-série de Taylor Swift avec le Cardigang. Balade parisienne sur quelques jours, peut-être que c'est pas si terrible le métro ?",
+        tag: "Métro",
+        color: "#bfbbb0",
+        img: "ratp-paris-131225.png",
+      },
+      {
+        title: "Concert",
+        meta: "La Cigale, Paris",
+        date: "14 novembre 2023",
+        year: "2023",
+        note: "Les basses dans la poitrine. On est sorti dans le froid, heureux.",
+        tag: "musique",
+        color: "#c4bfb5",
+      },
+    ];
+    /* ═══════════════════════════════════════════════════════════ */
+
+
+    /* ── Filtres par année (générés automatiquement) ── */
+const filtersEl = document.getElementById('filters');
+const gridEl    = document.getElementById('grid');
+
+const years = [...new Set(TICKETS.map(t => t.year))].sort((a, b) => b - a);
+years.forEach(y => {
+  const btn = document.createElement('button');
+  btn.className    = 'filter-btn';
+  btn.dataset.year = y;
+  btn.textContent  = y;
+  filtersEl.appendChild(btn);
+});
+
+filtersEl.addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+});
+
+/* ── Construction d'une carte ── */
+function buildCard(t) {
+  const wrap = document.createElement('div');
+  wrap.className    = 'card-wrap';
+  wrap.dataset.year = t.year;
+
+  const imgHTML = t.img
+    ? `<img class="ticket-img" src="${t.img}" alt="${t.title}" loading="lazy">`
+    : `<div class="ticket-img-placeholder" style="background:${t.color};"></div>`;
+
+  wrap.innerHTML = `
+    <div class="card-inner">
+      <div class="face face-front">
+        ${imgHTML}
+        <div class="ticket-stub">
+          <div class="ticket-title">${t.title}</div>
+          <div class="ticket-meta">${t.meta}</div>
+        </div>
+      </div>
+      <div class="face face-back">
+        <div class="back-date">${t.date}</div>
+        <div class="back-note">${t.note}</div>
+        <div class="back-tag">${t.tag}</div>
+      </div>
+    </div>`;
+
+  const img = wrap.querySelector('img');
+  if (img) img.addEventListener('load', syncBackHeights);
+
+  return wrap;
+}
+
+/* ── Tri par date (français → Date JS) ── */
+const MOIS = {
+  janvier: 0, février: 1, mars: 2, avril: 3,
+  mai: 4, juin: 5, juillet: 6, août: 7,
+  septembre: 8, octobre: 9, novembre: 10, décembre: 11
+};
+
+function parseDate(str) {
+  const parts = str.trim().split(' ');
+  if (parts.length === 3) {
+    const [jour, mois, annee] = parts;
+    return new Date(+annee, MOIS[mois] ?? 0, +jour);
+  }
+  if (parts.length === 2) {
+    const [mois, annee] = parts;
+    return new Date(+annee, MOIS[mois] ?? 0, 1);
+  }
+  return new Date(0);
+}
+
+/* ── Rendu de la grille ── */
+let cards = [];
+
+function render() {
+  cards.forEach(c => c.remove());
+  cards = [];
+
+  const activeYear = filtersEl.querySelector('.filter-btn.active').dataset.year;
+  const visible = (activeYear === 'all'
+    ? TICKETS
+    : TICKETS.filter(t => t.year === activeYear))
+    .slice()
+    .sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
+  if (visible.length === 0) {
+    const msg = document.createElement('p');
+    msg.className   = 'empty-msg';
+    msg.textContent = 'Aucun souvenir pour cette période.';
+    gridEl.insertBefore(msg, addWrap);
+    cards.push(msg);
+  } else {
+    visible.forEach(t => {
+      const card = buildCard(t);
+      gridEl.insertBefore(card, addWrap);
+      cards.push(card);
+    });
+  }
+
+  syncBackHeights();
+}
+
+    /* aligne la hauteur du verso sur celle du recto */
+    function syncBackHeights() {
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.card-wrap:not(.add-wrap)').forEach(wrap => {
+          const front = wrap.querySelector('.face-front');
+          const back  = wrap.querySelector('.face-back');
+          if (front && back) back.style.height = front.offsetHeight + 'px';
+        });
+      });
+    }
+    window.addEventListener('resize', syncBackHeights);
+
+
+    /* ── Bouton « ajouter » ── */
+    const addWrap = document.createElement('div');
+    addWrap.className = 'card-wrap add-wrap';
+    addWrap.innerHTML = `
+      <button class="add-btn face" aria-label="Ajouter un souvenir">
+        <span class="plus-icon">+</span>
+        <span>ajouter</span>
+      </button>`;
+    gridEl.appendChild(addWrap);
+
+    render();
+
+
+    /* ── Toggle dark / light ── */
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
+      themeBtn.textContent = isDark ? '☽' : '○';
+    });
+  </script>
+  
+<footer>
+  <div>
+    <div class="patch">
+  <img src="images/amesamissigned-embroidered-patch.png" alt="A Mes Amis Patch" class="patch-img">
+  </div>
+</footer>
+
 </body>
 </html>
