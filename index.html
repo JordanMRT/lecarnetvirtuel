@@ -584,7 +584,7 @@ function render() {
     /* aligne la hauteur du verso sur celle du recto */
     function syncBackHeights() {
       requestAnimationFrame(() => {
-        document.querySelectorAll('.card-wrap:not(.add-wrap)').forEach(wrap => {
+        document.querySelectorAll('.card-wrap').forEach(wrap => {
           const front = wrap.querySelector('.face-front');
           const back  = wrap.querySelector('.face-back');
           if (front && back) back.style.height = front.offsetHeight + 'px';
@@ -600,6 +600,9 @@ function render() {
       document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
       themeBtn.textContent = isDark ? '☽' : '○';
     });
+
+    render(); /* ← ajouter cette ligne */
+
   </script>
   
 <footer>
