@@ -568,12 +568,12 @@ function render() {
     const msg = document.createElement('p');
     msg.className   = 'empty-msg';
     msg.textContent = 'Aucun souvenir pour cette période.';
-    gridEl.insertBefore(msg);
+    gridEl.appendChild(msg);
     cards.push(msg);
   } else {
     visible.forEach(t => {
       const card = buildCard(t);
-      gridEl.insertBefore(card);
+      gridEl.appendChild(card);
       cards.push(card);
     });
   }
