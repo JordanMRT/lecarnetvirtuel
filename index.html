@@ -551,6 +551,14 @@ function parseDate(str) {
   return new Date(0);
 }
 
+/* ── Thème système au chargement ── */
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.dataset.theme = 'dark';
+  document.getElementById('theme-btn').textContent = '🌞';
+} else {
+  document.getElementById('theme-btn').textContent = '🌛';
+}
+
 /* ── Rendu de la grille ── */
 let cards = [];
 
@@ -599,7 +607,7 @@ function render() {
     themeBtn.addEventListener('click', () => {
       const isDark = document.documentElement.dataset.theme === 'dark';
       document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
-      themeBtn.textContent = isDark ? '☽' : '○';
+      themeBtn.textContent = isDark ? '🌛' : '🌞';
     });
 
     render(); /* ← ajouter cette ligne */
