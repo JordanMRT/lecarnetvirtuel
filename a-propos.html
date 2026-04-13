@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A propos de Souvenirs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────
+       VARIABLES & RESET
+    ───────────────────────────────────────── */
+    :root {
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --radius: 20px;
+      --bg:           #f2efe9;
+      --text:         #1c1916;
+      --text-muted:   #8a8278;
+      --border:       rgba(0,0,0,0.07);
+      --glass-bg:     rgba(245,242,236,0.6);
+      --glass-border: rgba(255,255,255,0.55);
+      --tag-bg:       rgba(0,0,0,0.07);
+      --tag-color:    #5a5248;
+      --toggle-track: #e0dbd2;
+      --toggle-thumb: #8a7a68;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.05), 0 4px 18px rgba(0,0,0,0.06);
+      --shadow-lg:    0 8px 40px rgba(0,0,0,0.15);
+    }
+
+    [data-theme="dark"] {
+      --bg:           #201c13;
+      --text:         #ece8e0;
+      --text-muted:   #7a7570;
+      --border:       rgba(255,255,255,0.06);
+      --glass-bg:     rgba(15,14,11,0.65);
+      --glass-border: rgba(255,255,255,0.11);
+      --tag-bg:       rgba(255,255,255,0.08);
+      --tag-color:    #b0a898;
+      --toggle-track: #28251e;
+      --toggle-thumb: #c4ad8a;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.3), 0 4px 24px rgba(0,0,0,0.28);
+      --shadow-lg:    0 8px 50px rgba(0,0,0,0.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.4s var(--ease), color 0.4s var(--ease);
+    }
+
+ .texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url('bg-dot.png');
+  background-repeat: repeat;
+  background-size: 25px 25px;
+  opacity: 0.1;
+  transition: filter 0.45s var(--ease);
+}
+
+[data-theme="dark"] .texture {
+  filter: invert(1);
+  opacity: 0.15;
+}
+    /* ─────────────────────────────────────────
+       HEADER
+    ───────────────────────────────────────── */
+    header {
+    margin: 0 auto;
+    padding: 2.8rem 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    }
+
+    .site-title {
+      font-family: "Covered By Your Grace", cursive;
+      font-weight: 300;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      letter-spacing: 0.01em;
+      color: var(--text);
+    }
+
+    .site-title span {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* toggle dark/light */
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: inherit;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .theme-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.2); }
+    [data-theme="dark"] .theme-btn:hover { border-color: rgba(255,255,255,0.2); }
+
+    /* ─────────────────────────────────────────
+       FILTRES
+    ───────────────────────────────────────── */
+    .filters-wrap {
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.28rem 0.85rem;
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+
+    .filter-btn a {
+      text-decoration: none;
+      color: var(--muted);
+      transition: all 0.2s var(--ease);
+    }
+
+    .filter-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.2); }
+    .filter-btn.active { color: var(--text); border-color: var(--text); }
+    [data-theme="dark"] .filter-btn:hover,
+    [data-theme="dark"] .filter-btn.active { border-color: rgba(255,255,255,0.35); }
+
+/* ─────────────────────────────────────────
+   MAIN CONTENT
+───────────────────────────────────────── */
+.about {
+  max-width: 900px;
+  margin: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.about-title {
+  font-family: 'Covered By Your Grace', Georgia, cursive;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--text);
+  margin-top: 1.5rem;
+}
+
+.about p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+.patch-img {
+  max-width: 350px;
+  margin: 0 auto; /* centre horizontalement en tant que bloc */
+  text-align: center;
+  padding-bottom: 2rem; /* espace avec le bas de la page si nécessaire */
+  padding-top: 2rem;
+  display: block;
+  filter: drop-shadow(-3px 6px 5px #21212130);
+}
+
+[data-theme="dark"] .patch-img {
+      filter: drop-shadow(-3px 6px 5px #00000070);
+    }
+
+.footerlink {
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centre l'ensemble dans le footer */
+  gap: 1rem;
+}
+
+.footerlink a {
+  color: #28251e;
+  font-family: "Lora", cursive;
+  width: 150px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.5rem 0.85rem;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-align: center;
+  display: inline-block; /* ← était "block", ce qui cassait tout */
+  background-color: #e0dbd240;
+  text-decoration: none;
+}
+
+.footerlink span {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  font-weight: 300;
+}
+
+.footerlink a:hover { color: #8a7a68; border-color: rgba(0,0,0,0.2); }
+[data-theme="dark"] .footerlink a:hover {color: #ece8e0; border-color: rgba(255,255,255,0.35); }
+[data-theme="dark"] .footerlink a { color: #c4ad8a; border-color: #c4ad8a;}
+
+@view-transition {navigation: auto;
+}
+  </style>
+    <link rel="shortcut icon" type="image/png" href="images/favico.ico"/>
+</head>
+<body>
+<div class="texture"></div>
+  <header>
+    <h1 class="site-title">A propos <span>du</span> projet</h1>
+    <button class="theme-btn" id="theme-btn" aria-label="Changer de thème">☽</button>
+  </header>
+
+  <div class="filters-wrap">
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-year="all"><a href="https://jordanmrt.github.io/lecarnetvirtuel/" title="Souvenirs & tickets">→ Revenir aux souvenirs & tickets</a></button>
+    </div>
+  </div>
+
+<!-- MAIN CONTENT -->
+
+<main class="about">
+  <h2 class="about-title">Pourquoi des tickets de caisse ?</h2>
+  <p>J'aime garder des souvenirs physiques de mes différentes aventures. Des cartes postales pour chaque nouvelle ville où j'ai été qui occupent un mur dédier, mais aussi des tickets, cartes de visites, ... se retrouvent dans mes carnets.</p>
+  <p>Garder ces petits souvenirs en papier, en physique, à l'heure du tout numérique vient comme une contestation : celle de préserver des petits instants que l'on peut toucher et se remémorer à chaque instants. Evidemment, il convient de préserver la planète et d'éviter le gaspillage papier.</p>
+  <p>C'est pourquoi je ne demande et conserve que ce qui est porteur d'un moment dont je veux me rappeler (parce que le ticket de mes courses ou celui d'une paire de chauttes n'est pas un souvenir marquant, je les refuse ou les reçoit par mail).
+  </p>
+
+  <h2 class="about-title">Les archives du quotidien ?</h2>
+  <p>Après des boîtes et des carnest qui se remplissent de ces petits fragments de papier, je me suis interessé une manière de relier les univers. Le quotidien est souvent synonime d'ennui et de banalité alors qu'il y a tellement de petits recoins où la douceur vient se loger.</p>
+  <p>Cette douceur, je la préserve donc là où je peux. Ici, elle ne s'effacera pas comme l'encre de ces tickets. Elle restera comme un testament des souvenirs du mondain.</p>
+</main>
+
+  <script>
+
+/* ── Thème système au chargement ── */
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.dataset.theme = 'dark';
+  document.getElementById('theme-btn').textContent = '🌞';
+} else {
+  document.getElementById('theme-btn').textContent = '🌛';
+}
+
+    /* ── Toggle dark / light ── */
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
+      themeBtn.textContent = isDark ? '🌛' : '🌞';
+    });
+
+  </script>
+  
+<footer>
+  <img src="images/amesamissigned-embroidered-patch.png" alt="A Mes Amis Patch" class="patch-img">
+  <div class="footerlink">
+     <span>© Jordan Emerit - 2026</span><span>•</span>
+      <a href="https://jordanmrt.github.io/lecarnetvirtuel/a-propos.html" target="_blank" title="A propos du projet">A propos du projet</a>
+    </div>
+</footer>
+
+</body>
+</html>

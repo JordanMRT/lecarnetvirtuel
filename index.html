@@ -257,14 +257,12 @@
     /* ── Verso ── */
     .face-back {
   position: absolute;
-  /* Remplace inset: 0 par ceci : */
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  /* pas de bottom — la hauteur s'adapte au contenu */
-  min-height: 100%;   /* couvre toujours le recto */
-  overflow: hidden;   /* coupe proprement si ça déborde quand même */
+  min-height: 100%;
+  overflow: hidden; 
   display: flex;
   flex-direction: column;
   padding: 1rem 0.9rem;
@@ -340,15 +338,15 @@
     /* ── Message vide ── */
    .empty-msg {
   display: block;
-
   width: 100%;
   max-width: 600px;
-
   margin: 2rem auto;
-
   text-align: center;
 }
 
+/* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
 .patch-img {
   max-width: 350px;
   margin: 0 auto; /* centre horizontalement en tant que bloc */
@@ -356,7 +354,54 @@
   padding-bottom: 2rem; /* espace avec le bas de la page si nécessaire */
   padding-top: 2rem;
   display: block;
+  filter: drop-shadow(-3px 6px 5px #21212130);
 }
+
+[data-theme="dark"] .patch-img {
+      filter: drop-shadow(-3px 6px 5px #00000070);
+    }
+
+.footerlink {
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centre l'ensemble dans le footer */
+  gap: 1rem;
+}
+
+.footerlink a {
+  color: #28251e;
+  font-family: "Lora", cursive;
+  width: 150px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.5rem 0.85rem;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-align: center;
+  display: inline-block; /* ← était "block", ce qui cassait tout */
+  background-color: #e0dbd240;
+  text-decoration: none;
+}
+
+.footerlink span {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  font-weight: 300;
+}
+
+.footerlink a:hover { color: #8a7a68; border-color: rgba(0,0,0,0.2); }
+[data-theme="dark"] .footerlink a:hover {color: #ece8e0; border-color: rgba(255,255,255,0.35); }
+[data-theme="dark"] .footerlink a { color: #c4ad8a; border-color: #c4ad8a;}
+
+@view-transition {navigation: auto;
+}
+
   </style>
     <link rel="shortcut icon" type="image/png" href="images/favico.ico"/>
 </head>
@@ -616,6 +661,10 @@ function render() {
   
 <footer>
   <img src="images/amesamissigned-embroidered-patch.png" alt="A Mes Amis Patch" class="patch-img">
+  <div class="footerlink">
+     <span>© Jordan Emerit - 2026</span><span>•</span>
+      <a href="https://jordanmrt.github.io/lecarnetvirtuel/a-propos.html" target="_blank" title="A propos du projet">A propos du projet</a>
+    </div>
 </footer>
 
 </body>
